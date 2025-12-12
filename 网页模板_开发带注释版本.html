@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Expires" content="0">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Cache-control" content="no-cache,must-revalidate">
+  <meta http-equiv="Cache" content="no-cache">
+  <!-- 页面标题 -->
+  <title>网页模板</title>
+  <link rel="stylesheet" href="css_js/iview.css">
+  <style>
+    /* 整体页面样式 */
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, "Helvetica Neue", Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      line-height: 1.4rem;
+      font-size: 14px;
+    }
+
+    /* 容器 */
+    #app {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 20px;
+    }
+
+    [v-cloak] {
+      display: none !important;
+    }
+
+    #loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      font-size: 18px;
+      color: #555;
+    }
+
+    .c-practice,
+    .c-config,
+    .c-exam,
+    .c-result {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 800px;
+      min-width: 320px;
+    }
+
+    /* 按钮组 */
+    .pageControl {
+      display: flex;
+      justify-content: space-between;
+      margin: 10px 0;
+    }
+
+    .btn-base {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 6px;
+      background-color: #2d8cf0;
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+      margin: 5px;
+    }
+
+    .btn-base[disabled] {
+      background-color: #858585;
+      cursor: not-allowed;
+    }
+
+    /* 头部容器 */
+    .header-container,
+    .exam-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      font-size: 14px;
+      flex-wrap: wrap;
+    }
+
+    /* 题目进度显示 */
+    .process {
+      font-weight: bold;
+      width: auto;
+      margin: 0 10px;
+      flex: 0 0 auto;
+      display: block;
+      font-size: 0.8rem;
+      letter-spacing: 0.1rem;
+    }
+
+    /* 题目跳转选择器 */
+    .question-selector {
+      font-size: 16px;
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #fff;
+      color: #333;
+      max-width: 100%;
+      box-sizing: border-box;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .question-selector:focus {
+      outline: none;
+      border-color: #5cb85c;
+      box-shadow: 0 0 0 0.2rem rgba(92, 184, 92, 0.25);
+    }
+
+    .question-selector option {
+      font-size: 16px;
+      color: #333;
+      background-color: #fff;
+    }
+
+    /* 模式选择：刷题 / 看题 / 考试 */
+    .mode-selector {
+      margin: 0;
+      flex: 0 0 auto;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+    }
+
+    .mode-selector label {
+      margin-left: 10px;
+    }
+
+    /* 题目卡片 */
+    .timu {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 2vw auto;
+      width: 100%;
+    }
+
+    .ivu-card-head p {
+      overflow: inherit;
+      white-space: inherit;
+      line-height: 24px;
+    }
+
+    .title {
+      font-size: large;
+      line-height: 24px;
+    }
+
+    .type {
+      padding: 3px 6px;
+      line-height: 20px;
+      margin-right: 10px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      color: white;
+      border-radius: 6px;
+      display: inline-block;
+      letter-spacing: 0.1rem;
+      text-indent: 0.2rem;
+      background-color: #1890ff;
+    }
+
+    .type-single {
+      background-color: #19be6b;
+    }
+
+    .type-multiple {
+      background-color: #2db7f5;
+    }
+
+    .type-judge {
+      background-color: #f04134;
+    }
+
+    .type-qa {
+      background-color: #80848f;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      margin: 0 0 2vw;
+      line-height: 2rem;
+      letter-spacing: 0.1rem;
+    }
+
+    .options div {
+      padding: 1vw 2vw;
+      border: 1px solid #ddd;
+      border-radius: 1.5vw;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+
+    .options .active {
+      background-color: #c9d0ee;
+      border: 1px solid #000;
+    }
+
+    .options .disabled {
+      pointer-events: none;
+    }
+
+    .result {
+      margin: 2vw 0 3vw;
+      padding: 8px 16px;
+      border-radius: 4px;
+      color: #515a6e;
+      font-size: 12px;
+      line-height: 16px;
+    }
+
+    .result.success {
+      background-color: #dff0d8;
+      color: #3c763d;
+      border: 1px solid #8ce6b0;
+    }
+
+    .result.warning {
+      background-color: #fcf8e3;
+      color: #8a6d3b;
+      border: 1px solid #ffd77a;
+    }
+
+    .result.info {
+      background-color: #ecf0f1;
+      color: #31708f;
+      border: 1px solid #abdcff;
+    }
+
+    /* 答案区域（用于显示正确答案及解析） */
+    .answer,
+    .analysis {
+      margin-top: 1vw;
+      white-space: pre-line;
+    }
+
+    .config-info {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 2vw auto;
+      width: 100%;
+    }
+
+
+    /* 考试头部倒计时 */
+    .exam-header {
+      padding: 12px;
+      background: #f8f9fa;
+      border-bottom: 1px solid #dee2e6;
+      margin-bottom: 16px;
+      font-size: 14px;
+      display: flex;
+      justify-content: space-between;
+      /* color: #333; */
+    }
+
+    .exam-header strong {
+      font-size: 16px;
+      color: #f50;
+    }
+
+    .question-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 15px 0;
+    }
+
+    .nav-btn {
+      width: 40px;
+      height: 40px;
+      margin: 4px;
+      border: 2px solid transparent;
+      border-radius: 8px;
+      background-color: #e9ecef;
+      color: #495057;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .nav-btn.active {
+      background-color: #2d8cf0 !important;
+      color: white !important;
+      border-color: #2d8cf0;
+      transform: scale(1.05);
+    }
+
+    .nav-btn.answered {
+      background-color: #38b06d;
+      color: white;
+      border-color: #38b06d;
+    }
+
+    .nav-btn.marked {
+      background-color: #ffb700;
+      color: #1a1a1a;
+      border-color: #e69e00;
+    }
+
+    .nav-btn.unanswered {
+      background-color: #e9ecef;
+      color: #495057;
+    }
+
+
+
+
+    .toggle-analysis {
+      margin: 20px 0;
+    }
+
+    .exam-result {
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .exam-result-item {
+      margin: 15px 0;
+      padding: 10px;
+      border: 1px dashed #ccc;
+    }
+
+    .result-summary {
+      max-width: 800px;
+      width: 100%;
+      margin: 40px auto;
+      text-align: center;
+      padding: 0 20px;
+      box-sizing: border-box;
+      background-color: #e5e5e6;
+    }
+
+    /* 容器样式 */
+    .exam-result-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    /* 标题样式 */
+    .exam-title {
+      font-size: 24px;
+      color: #007bff;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    /* 完成时间样式 */
+    .exam-time {
+      font-size: 16px;
+      color: #6c757d;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    /* 结果卡片样式 */
+    .exam-result-card {
+      width: 100%;
+      max-width: 800px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* 左侧信息样式 */
+    .exam-info-left {
+      flex: 1;
+      margin-right: 20px;
+    }
+
+    /* 右侧分数样式 */
+    .exam-info-right {
+      flex: 1;
+      text-align: center;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    /* 答题人信息样式 */
+    .exam-answering-person,
+    .exam-use-time {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    /* 答对数样式 */
+    .exam-corrent-count {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    /* 总题数样式 */
+    .exam-total-count {
+      font-size: 14px;
+      color: #6c757d;
+    }
+
+    /* 分数样式 */
+    .exam-score {
+      font-size: 72px;
+      font-weight: bold;
+      color: #ff6f00;
+      margin: 20px 0;
+    }
+
+    /* 总分样式 */
+    .exam-total-score {
+      padding: 2px 4px;
+      line-height: 20px;
+      margin-top: 13px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      color: white;
+      border-radius: 12px;
+      display: inline-block;
+      letter-spacing: 0.1rem;
+      text-indent: 0.2rem;
+      background-color: #1890ff;
+    }
+
+    /* 查看答题解析按钮样式 */
+    .exam-parse-button {
+      margin-top: 20px;
+    }
+
+    /* 媒体查询 - 小屏幕 */
+    @media (max-width: 768px) {
+      .exam-result-card {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .exam-info-left,
+      .exam-info-right {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 20px;
+        flex: 1 1 100%;
+      }
+
+      .exam-score {
+        font-size: 72px;
+      }
+    }
+
+    /* 配置界面容器 */
+    .config-container {
+      max-width: 800px;
+      width: 100%;
+      margin: 40px auto;
+      padding: 30px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    }
+
+    /* 标题 */
+    .config-container h2 {
+      text-align: center;
+      color: #333;
+      font-size: 24px;
+      margin-bottom: 24px;
+      font-weight: 600;
+    }
+
+    /* 表单组 */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #515a6e;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group input[type="number"] {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #dddee1;
+      border-radius: 6px;
+      font-size: 15px;
+      color: #515a6e;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      box-sizing: border-box;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #57a3f5;
+      box-shadow: 0 0 0 2px rgba(87, 163, 245, 0.2);
+    }
+
+    /* 按钮区域 */
+    .button-group {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 30px;
+    }
+
+    .button-group button {
+      padding: 12px 32px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-width: 100px;
+    }
+
+    .button-group button.btn-start {
+      background-color: #57a3f5;
+      color: white;
+    }
+
+    .button-group button.btn-start:hover {
+      background-color: #3d8bdf;
+      transform: translateY(-1px);
+    }
+
+    .button-group button.btn-reset {
+      background-color: #f7f7f7;
+      color: #999;
+      border: 1px solid #dddee1;
+    }
+
+    .button-group button.btn-reset:hover {
+      background-color: #e8e8e8;
+      color: #666;
+    }
+
+    /* 响应式：小屏幕适配 */
+    @media (max-width: 576px) {
+      .config-container {
+        margin: 20px 15px;
+        padding: 20px;
+      }
+
+      .button-group {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .button-group button {
+        width: 200px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Vue 根容器 -->
+  <div id="app" v-cloak>
+    <div class="c-practice" v-if="currentView === 'practice'">
+      <ButtonGroup class="pageControl">
+        <!-- 添加按钮跳转到考试配置 -->
+        <Button type="primary" class="btn-base top-left" size="small" @click="currentView = 'config'">📝 开始考试</Button>
+
+        <!-- 深色模式切换按钮 -->
+        <button @click="toggleDarkMode" class="btn-base dark-mode-toggle" disabled>
+          {{ isDarkMode ? '🌙 浅色模式' : '☀️ 深色模式' }}</button>
+      </ButtonGroup>
+
+      <div class="header-container">
+        <!-- 当前题目进度 -->
+        <p class='process'>第 {{page + 1}} / {{data.length}}题</p>
+        <!-- 题目跳转（仅在非考试模式显示） -->
+        <select class="question-selector" v-model="page" @change="goToQuestion(page)">
+          <!-- 遍历题目列表生成选项 -->
+          <option v-for="(item, index) in data" :value="index" :key="index">第 {{ index + 1 }} 题
+          </option>
+        </select>
+        <!-- 模式选择：刷题 / 看题 -->
+        <form class="mode-selector">
+          <label><input type="radio" name="mode" value="practice" v-model="mode">刷题</label>
+          <label><input type="radio" name="mode" value="review" v-model="mode">看题</label>
+        </form>
+      </div>
+
+      <Card class='timu'>
+        <p slot="title">
+          <label class='type' v-if="timu.options" :class="{
+      'type-single': timu.options.length && timu.answer.length === 1 && timu.options[0] !== '正确',
+      'type-multiple': timu.options.length && timu.answer.length > 1,
+      'type-judge': timu.options.length && timu.answer.length === 1 && timu.options[0] === '正确',
+      'type-qa': !timu.options.length
+    }">{{timu.options.length ?
+            (timu.answer.length === 1 ? (timu.options[0]!=='正确' ? '单选':'判断') : '多选') :
+            '问答'}}</label><label class="title">{{ page + 1 }} 、{{timu.title}}</label>
+        </p>
+        <div class="options">
+          <div v-for="(option, key) in timu.options" :key="key" @click="!answer && select(key)"
+            :class="{ active: answerSelected.includes(key), disabled: answer }">
+            {{ alphabet[key] }}. {{ option }}
+          </div>
+        </div>
+        <div v-if="mode === 'practice' && answer && result===1" class='result success'>恭喜回答正确</div>
+        <div v-if="mode === 'practice' && answer && result===0" class='result warning'>抱歉回答错误了哦！</div>
+        <div v-if="(mode === 'practice' && answer && result === 2) || (mode === 'review' && result === 2)"
+          class='result info'>问答题暂不支持解答</div>
+        <div v-if="answer || mode === 'review'" class="answer">答案：{{ timu.answer }}</div>
+        <div v-if="answer || mode === 'review'" class="analysis">解析：{{ timu.analysis || '该答案暂无解析' }}</div>
+      </Card>
+
+      <ButtonGroup class="pageControl">
+        <Button type="primary" class="btn-base btn-prev" @click="prevQuestion" :disabled="page === 0">⏪上一题</Button>
+        <Button type="primary" class="btn-base btn-check"
+          :disabled="answerSelected.length === 0 || mode === 'review' || answer" @click="submitAnswer" size="large" long
+          v-if="mode === 'practice' && timu.options.length > 0">✅确定答案</Button>
+        <Button type="primary" class="btn-base btn-next" @click="nextQuestion"
+          :disabled="page===data.length-1">⏩下一题</Button>
+      </ButtonGroup>
+    </div>
+
+    <div class="c-config" v-if="currentView === 'config'">
+      <ButtonGroup class="pageControl">
+        <!-- 添加按钮返回刷题 -->
+        <Button type="primary" class="btn-base top-left" size="small" @click="returnPractice">🔙返回练习</Button>
+        <!-- 深色模式切换按钮 -->
+        <button @click="toggleDarkMode" class="btn-base dark-mode-toggle" disabled>
+          {{ isDarkMode ? '🌙 浅色模式' : '☀️ 深色模式' }}
+        </button>
+      </ButtonGroup>
+
+      <!-- 考试配置页 -->
+      <div class="config-container">
+        <h2>考试配置</h2>
+        <div class="form-group">
+          <label>姓名：</label>
+          <Input v-model="studentInfo.name" placeholder="请输入姓名" />
+        </div>
+        <div class="form-group">
+          <label>员工编号：</label>
+          <Input v-model="studentInfo.id" placeholder="请输入员工编号" />
+        </div>
+        <div class="form-group">
+          <label>题目数量：</label>
+          <input type="number" v-model.number="examConfig.totalQuestions" :min="1" :max="originalData.length" />
+        </div>
+        <div class="form-group">
+          <label>考试时间（分钟）：</label>
+          <input type="number" v-model.number="examConfig.timeLimit" :min="1" />
+        </div>
+        <div class="form-group">
+          <label>合格标准：</label>
+          <input type="number" v-model.number="examConfig.qualify" min="1" disabled />
+        </div>
+        <div class="button-group">
+          <Button class="btn-start" type="primary" long size="large" @click="startExam">🚀开始考试</Button>
+          <button class="btn-reset" @click="resetConfig">重置</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="c-exam" v-if=" currentView==='exam'">
+      <ButtonGroup class="pageControl">
+        <Button type="primary" size="small" class="btn-base top-left" @click="confirmSubmit">🎯提交考试</Button>
+        <button @click="toggleDarkMode" class="btn-base dark-mode-toggle" disabled>
+          {{ isDarkMode ? '🌙 浅色模式' : '☀️ 深色模式' }}
+        </button>
+      </ButtonGroup>
+
+      <!-- 头部倒计时 -->
+      <div class="exam-header">
+        <span>🧑考生：{{ studentInfo.name }} ({{ studentInfo.id }})</span>
+        <span>合格标准：{{examConfig.qualify}}分</span>
+        <!-- <span>用时：{{ formatTime(examConfig.timeLimit * 60 - examTimeLeft) }}</span> -->
+        <span>⏳剩余：<strong>{{ formatTime(examTimeLeft) }}</strong></span>
+      </div>
+
+      <!-- 考试题显示 -->
+      <Card class='timu'>
+        <p slot="title">
+          <label class='type' v-if="timu.options" :class="{
+      'type-single': timu.options.length && timu.answer.length === 1 && timu.options[0] !== '正确',
+      'type-multiple': timu.options.length && timu.answer.length > 1,
+      'type-judge': timu.options.length && timu.answer.length === 1 && timu.options[0] === '正确',
+      'type-qa': !timu.options.length
+    }">{{timu.options.length ?
+            (timu.answer.length === 1 ? (timu.options[0]!=='正确' ? '单选':'判断') : '多选') :
+            '问答'}}</label> <label class="title">{{ page + 1 }} 、{{timu.title}}</label>
+          <!-- 标记按钮 -->
+          <button class="btn" :class="currentIsMarked ? 'btn-warning' : 'btn-outline'" @click="toggleMark">
+            {{ currentIsMarked ? '📌取消标记' : '📌标记题目' }}
+          </button>
+        </p>
+
+        <div class="options">
+          <div v-for="(option, key) in timu.options" :key="key" @click="selectExam(key)"
+            :class="{ active: examAnswers[page]?.includes(key) }">
+            <label> {{ alphabet[key] }}. {{ option }}</label>
+          </div>
+        </div>
+      </Card>
+
+      <ButtonGroup class="pageControl">
+        <Button type="primary" class="btn-base btn-prev" @click="prevQuestion" :disabled="page === 0">⏪上一题</Button>
+        <!-- 增强版下拉框：支持颜色 + 图标 -->
+        <select v-model="page" class="question-selector" @change="goToQuestion(page)">
+          <option v-for="(_, index) in data" :key="index" :value="index" :style="{
+      // 背景色优先级：标记(黄色) > 已答(绿色) > 未答(灰色)
+      backgroundColor: page===index?'#2d8cf0': isMarked(index) ? '#ffb700': isAnswered(index) ? '#38b06d' :  '#e9ecef', 
+      // 文字颜色
+      color: page===index? '#ffffff' : isMarked(index) ? '#1a1a1a' : isAnswered(index) ? '#ffffff' :  '#495057',
+      // 加粗当前题
+      fontWeight: page === index ? 'bold' : 'normal',
+      borderRadius: '6px',
+      margin: '2px'
+    }">
+            第 {{ index + 1 }} 题
+            {{ isMarked(index) ? ' ⭐' : isAnswered(index) ? ' ✅' : ' ⭕' }}
+          </option>
+        </select>
+        <Button type="primary" class="btn-base btn-next" @click="nextQuestion"
+          :disabled="page === data.length-1">⏩下一题</Button>
+      </ButtonGroup>
+
+      <!-- 所有题目按钮导航 -->
+      <div class="question-nav">
+        <button v-for="(item, index) in data" :key="index" @click="goToQuestion(index)" :class="[
+    'nav-btn',
+    isMarked(index) ? 'marked' : isAnswered(index) ? 'answered' : 'unanswered',
+    page === index ? 'active' : ''
+  ]"><label> {{ index + 1 }}</label>
+        </button>
+      </div>
+    </div>
+
+    <div class="c-result" v-if="currentView === 'result'">
+      <ButtonGroup class="pageControl">
+        <Button type="primary" class="btn-base top-left" @click="returnPractice">🔙返回练习</Button>
+        <button type="primary" class="btn-base dark-mode-toggle" @click="toggleDarkMode" disabled>
+          {{ isDarkMode ? '🌙 浅色模式' : '☀️ 深色模式' }}
+        </button>
+      </ButtonGroup>
+
+      <div class="result-summary">
+        <div class="exam-title">网页模板</div>
+        <div class="exam-time">完成时间 {{new Date().toLocaleString()}}</div>
+        <div class="exam-result-card">
+          <div class="exam-info-left">
+            <div class="exam-score" :style="{
+            color: examResult.score >= examConfig.qualify ? '#38b06d' : '#d9534f'
+          }">{{ examResult.score }}</div>
+            <div class="exam-total-score">总分100</div>
+          </div>
+
+          <div class="exam-info-right">
+            <div>
+              <div class="exam-answering-person">答题人：{{ studentInfo.name }}({{studentInfo.id}})</div>
+              <div class="exam-use-time">用时：{{ formatTime(examConfig.timeLimit * 60 - examTimeLeft) }}</div>
+            </div>
+            <div>
+              <div class="exam-corrent-count">答对 {{ examResult.correctCount }}题</div>
+              <div class="exam-total-count">共{{ examResult.totalCount }}题</div>
+            </div>
+          </div>
+
+        </div>
+        <Divider class="result-divider"></Divider>
+
+        <div class="toggle-analysis" @click="toggleAnalysis">
+          {{ showAnalysis ? '收起答题解析 ▲' : '查看答题解析 ▼' }}
+        </div>
+        <label>
+          <input v-if="showAnalysis" type="checkbox" v-model="showAllQuestions"> 显示全部题目
+        </label>
+
+        <div v-if="showAnalysis" class="analysis-panel">
+          <!-- 错题解析 -->
+          <div v-for="(item, index) in data" :key="item.id" class="exam-result-item"
+            v-if="showAllQuestions || !examJudge[index]"
+            style="text-align: left; margin: 20px 0; padding: 15px; border: 1px dashed #e8eaec; border-radius: 4px;">
+
+            <p><strong>{{index+1}}.</strong>{{item.title}} {{ examJudge[index] ? '✅ 回答正确' : '❌ 回答错误' }}</p>
+            <div>
+              <div v-for="(option, key) in item.options" :key="key"
+                :class="{ active: examAnswers[index]?.includes(key) }">
+                <label>{{ alphabet[key] }}. {{ option }}</label>
+              </div>
+            </div>
+            <div> 你的答案：{{(examAnswers[index] || []).map(k =>alphabet[k]).sort().join('') || '未作答'}}</div>
+            <div> 正确答案：{{item.answer}}</div>
+            <div v-if="item.analysis">解析：{{ item.analysis }}</div>
+          </div>
+        </div>
+      </div>
+
+      <ButtonGroup class="pageControl">
+        <button type="primary" class="btn-base btn-save" @click="saveReport" long>💾保存报告</button>
+        <button type="primary" class="btn-base btn-restart" @click="currentView = 'config'" long>🚀重新考试</button>
+      </ButtonGroup>
+    </div>
+
+  </div>
+  <div id="loading">
+    <p>加载中，请稍候...</p>
+  </div>
+
+    <!-- 引入 Vue.js -->
+    <script src="css_js/vue.min.js"></script>
+    <!-- 引入 iView -->
+    <script src="css_js/iview.min.js"></script>
+    <!-- 引入 html2canvas -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+    <script>
+      // 创建 Vue 实例
+      new Vue({
+        // 挂载到 #app 元素
+        el: '#app',
+        data() {
+          return {
+            originalData: [
+              { "id": "202507270931124064", "title": "今天（2024年7月20日）是星期几？", "options": ["一", "三", "六"], "answer": "C", "analysis": "2024年7月20日是星期六。" },
+              { "id": "202507270931150129", "title": "今天早上吃的什么东西？", "options": ["鸡蛋", "牛奶", "巧克力"], "answer": "AB", "analysis": "今天没吃巧克力。" },
+              { "id": "202507270931416575", "title": "华为是中国最牛的企业之一。", "options": ["正确", "错误"], "answer": "A", "analysis": "2024年还是，什么时候把之一去掉就不知道了。" },
+              { "id": "202507270931270701", "title": "“凡是敌人反对的的我们就要拥护，凡是敌人拥护的我们就要反对”这句话是谁说的？", "options": [], "answer": "毛泽东主席。", "analysis": "毛主席万岁。" }
+            ],      // 题库数据
+            data: [],         // 当前使用的题库（考试时会被替换）
+            page: 0,          // 当前题目索引
+            answerSelected: [],// 用户选择的选项索引数组
+            answer: false,// 是否显示答案（true=显示）
+            result: false,// 判题结果（1=正确，0=错误）
+            mode: 'practice',     // 'practice' 为刷题模式，'review' 为看题模式
+            currentView: 'practice',      // 当前视图：practice, config, exam, result
+
+            // 考试配置
+            examConfig: {
+              totalQuestions: 10,
+              timeLimit: 30,
+              qualify: 80
+            },
+            examResult: {
+              correctCount: 0,
+              totalCount: 0,
+              score: 0
+            },
+            studentInfo: {
+              id: "",
+              name: ""
+            },
+            examAnswers: [],      // 存储每题答题结果，如 [null, [0], [1], null, ...]
+            examJudge: [],      // 每题答题正确或错误
+            markedQuestions: [],// 存储被标记的题号索引，如 [0, 3]
+            examTimeLeft: 0,    // 存储总秒数
+            examTimer: null,
+
+            showAnalysis: true,       // 默认显示错题解析
+            isDarkMode: false,     // 默认浅色模式
+
+            showAllQuestions: false,
+
+            // 将来启用时使用
+            lightTheme: {
+              bg: '#ffffff',
+              card: '#ffffff',
+              text: '#212529',
+              border: '#dee2e6'
+            },
+
+            darkTheme: {
+              bg: '#121212',
+              card: '#1e1e1e',
+              text: '#f8f9fa',
+              border: '#495057'
+            },
+            // 选项字母映射
+            alphabet: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
+          };
+        },
+      mounted() {
+        // Vue 渲染完成后隐藏 loading
+        const loading = document.getElementById('loading');
+        if (loading) {
+          loading.remove(); // 或 loading.style.display = 'none';
+        }
+      },
+
+        computed: {
+          timu() {
+            return this.data[this.page] || {};
+          },
+          // 计算属性：判断是否为考试最后一题
+          isLastQuestion() {
+            return this.page === this.data.length - 1;
+          },
+          // 判断某题是否已答
+          isAnswered() {
+            return (index) => {
+              const ans = this.examAnswers[index];
+              return Array.isArray(ans) && ans.length > 0;
+            };
+          },
+          // 判断某题是否被标记
+          isMarked() {
+            return (index) => this.markedQuestions.includes(index);
+          },
+          // 当前题是否已标记（用于按钮状态）
+          currentIsMarked() {
+            return this.markedQuestions.includes(this.page);
+          }
+        },
+        methods: {
+
+          initTimu() {
+            // 清空用户选择
+            this.answerSelected = [];
+            // 看题或考试结束时自动显示答案
+            this.answer = this.mode === 'review';
+            // 重置结果
+            this.result = false;
+            // 获取当前题目
+            const q = this.timu;
+            // 如果是问答题（无选项），直接显示答案
+            if (!q.options || q.options.length === 0) {
+              this.answer = true;
+              this.result = 2;  // 问答题
+            }
+          },
+
+          toggleMark() {
+            const index = this.page;
+            const i = this.markedQuestions.indexOf(index);
+            if (i > -1) {
+              // 已标记，取消
+              this.markedQuestions.splice(i, 1);
+            } else {
+              // 未标记，添加
+              this.markedQuestions.push(index);
+            }
+          },
+
+
+          select(key) {
+            const multi = this.timu.answer.length > 1;
+            const i = this.answerSelected.indexOf(key);
+
+            if (i > -1) {
+              this.answerSelected.splice(i, 1);
+            } else if (multi) {
+              this.answerSelected.push(key);
+            } else {
+              this.answerSelected = [key];
+              if (this.mode === 'practice') {
+                this.$nextTick(this.submitAnswer);
+              }
+            }
+
+          },
+
+          submitAnswer() {
+            // 规范化正确答案--转大写--拆分--排序
+            const correct = this.normalizeAnswer(this.timu.answer);
+            // 用户选择的答案--转字母--排序
+            const user = this.answerSelected.map(i => this.alphabet[i]).sort();
+
+            // 判断是否正确，数组转字符串比较（或使用 JSON.stringify）
+            this.result = JSON.stringify(correct) === JSON.stringify(user) ? 1 : 0;
+
+            // 显示答案
+            this.answer = true;
+          },
+
+          // 标准化答案格式（核心优化）
+          normalizeAnswer(str) {
+            return str.toUpperCase().replace(/[^A-Z]/g, '').split('').sort();
+          },
+
+          resetConfig() { },
+          // 开始考试
+          startExam() {
+            const { id, name } = this.studentInfo;
+            // 转为数字
+            const count = parseInt(this.examConfig.totalQuestions);
+
+            if (!name.trim()) {
+              return this.$Message?.warning("请输入姓名") || alert("请输入姓名");
+            }
+            if (!id.trim()) {
+              return this.$Message?.warning("请输入编号") || alert("请输入编号");
+            }
+
+            // 验证输入
+            if (isNaN(count) || count < 1 || count > this.originalData.length) {
+              this.$Modal.warning({
+                title: '输入错误',
+                content: `请填写1-${this.originalData.length}之间的数字`
+              });
+              return;
+            }
+
+            // 随机抽题
+            const shuffled = this.shuffle([...this.originalData]).slice(0, count);
+
+            //2. 对每道题调用 shuffleOptions 打乱选项
+            this.data = shuffled.map(question => {
+              return this.shuffleOptions(question); // ✅ 调用函数
+            });
+
+
+
+            // 初始化考试状态
+            this.examAnswers = Array.from({ length: count }, () => null);
+            this.examJudge = Array.from({ length: count }, () => null);
+            this.markedQuestions = [];
+            this.page = 0;
+            this.examTimeLeft = this.examConfig.timeLimit * 60;   // 设置倒计时(秒)
+            this.currentView = 'exam';
+            this.startExamTimer();
+            this.initTimu();
+          },
+
+          selectExam(key) {
+            const answers = this.examAnswers[this.page] || [];
+
+            if (this.timu.answer.length === 1) {
+              // 单选题：替换答案
+              this.$set(this.examAnswers, this.page, [key]);
+            } else {
+              // 多选题：切换选中状态
+              const i = answers.indexOf(key);
+              if (i > -1) {
+                this.$set(this.examAnswers, this.page, answers.filter(k => k !== key));
+              } else {
+                this.$set(this.examAnswers, this.page, [...answers, key]);
+              }
+            }
+
+            // 👇 新增：如果当前题已被标记，则答题后自动取消标记
+            const currentIndex = this.page;
+            if (this.markedQuestions.includes(currentIndex)) {
+              this.toggleMark(); // 或直接移除
+            }
+          },
+
+          confirmSubmit() {
+            this.$Modal.confirm({
+              title: '确认提交',
+              content: '提交后无法修改，确定要交卷吗？',
+              onOk: () => this.submitExam()
+            });
+          },
+
+          submitExam() {
+            // 跳转到结果页
+            this.currentView = 'result';
+
+            // 停止倒计时
+            if (this.examTimer) {
+              clearInterval(this.examTimer);
+              this.examTimer = null;
+            }
+
+            // 计算成绩
+            let correct = 0;
+            this.data.forEach((q, index) => {
+              const userAns = (this.examAnswers[index] || [])
+                .map(k => this.alphabet[k])
+                .sort()
+                .join('');
+              const correctAns = this.normalizeAnswer(q.answer).join('');
+              this.examJudge[index] = (userAns === correctAns);
+              if (this.examJudge[index]) correct++;
+            });
+
+            this.examResult = {
+              correctCount: correct,
+              totalCount: this.data.length,
+              score: Math.round(correct / this.data.length * 100)
+            };
+          },
+
+
+          // 跳转到指定题目
+          goToQuestion(index) {
+            if (index >= 0 && index < this.data.length) {
+              this.page = index;
+              this.initTimu();
+            }
+          },
+          nextQuestion() {
+            // 下一题
+            if (this.page < this.data.length - 1) {
+              this.goToQuestion(this.page + 1);
+            }
+          },
+
+          prevQuestion() {
+            if (this.page > 0) {
+              this.goToQuestion(this.page - 1);
+            }
+          },
+
+
+          // 返回刷题界面
+          returnPractice() {
+            this.currentView = 'practice';
+            this.data = [...this.originalData];
+            this.page = 0;
+            this.initTimu();
+          },
+          toggleAnalysis() {
+            this.showAnalysis = !this.showAnalysis;
+          },
+
+          saveReport() {
+            const element = document.querySelector('.result-summary');
+            if (!element) return;
+
+            element.style.backgroundColor = '#fff';
+            html2canvas(element, {
+              backgroundColor: '#fff',
+              scale: 2,
+              useCORS: true
+            }).then(canvas => {
+              const link = document.createElement('a');
+              link.download = `考试报告_${this.studentInfo.name}(${this.studentInfo.id}).png`;
+              link.href = canvas.toDataURL('image/png');
+              link.click();
+            }).catch(err => {
+              console.error('保存报告失败:', err);
+              alert('保存失败');
+            }).finally(() => {
+              element.style.backgroundColor = '';
+            });
+          },
+
+          shuffle(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+          },
+
+          // 在 methods 中添加这个函数
+          shuffleOptions(q) {
+
+            // 如果没有 options，说明是问答题，直接返回
+            if (!q.options) {
+              return { ...q };
+            }
+
+            // 判断是否为判断题（选项是“正确/错误”、“对/错”等）
+            const isJudge =
+              q.options.length === 2 &&
+              (q.options.includes('正确') ||
+                q.options.includes('错误'));
+
+            // 如果是判断题，不打乱，直接返回
+            if (isJudge) {
+              return { ...q };
+            }
+
+            // === 开始打乱选择题（单选/多选）===
+
+            // 备份原选项和答案
+            const options = [...q.options];
+
+            // 字母列表（支持最多6个选项）
+            const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
+
+            // 👇 把字符串答案转为数组，例如 "AB" → ["A", "B"]
+            const answerChars = q.answer.split(''); // 不管单选多选都拆成字符
+            const newAnswer = [];
+
+            // 生成 {字母: 内容} 的映射，用于后续找答案
+            const optionMap = {};
+            for (let i = 0; i < options.length; i++) {
+              optionMap[letters[i]] = options[i];
+            }
+
+            // 随机打乱选项数组
+            for (let i = options.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [options[i], options[j]] = [options[j], options[i]];
+            }
+
+            // 找出新的答案字母：根据内容反查新位置
+            for (const letter of answerChars) {
+              const content = optionMap[letter]; // 原答案对应的内容，如 "B" -> "香蕉"
+              if (content) {
+                const newIndex = options.indexOf(content); // 找到内容在新顺序中的位置
+                if (newIndex !== -1) {
+                  newAnswer.push(letters[newIndex]); // 转成新字母
+                }
+              }
+            }
+
+            const finalAnswer = Array.isArray(q.answer) ? newAnswer : newAnswer.join(''); // 比如 ["B", "D"] → "BD"
+
+            // 返回新题目对象
+            return {
+              ...q,
+              options: options,
+              answer: finalAnswer
+            };
+          },
+
+          toggleDarkMode() {
+            this.isDarkMode = !this.isDarkMode;
+            // 保存用户偏好
+            localStorage.setItem('darkMode', this.isDarkMode);
+            // 可选：添加切换动画类
+            document.body.classList.toggle('dark-mode', this.isDarkMode);
+          },
+
+          // 倒计时函数
+          startExamTimer() {
+            const endTime = Date.now() + this.examTimeLeft * 1000;
+            this.examTimer = setInterval(() => {
+              const left = Math.floor((endTime - Date.now()) / 1000);
+              if (left <= 0) {
+                clearInterval(this.examTimer);
+                this.$Modal.info({
+                  title: '时间到',
+                  content: '考试时间到，已自动交卷！',
+                  onOk: () => {
+                    this.submitExam();
+                  }
+                });
+              } else {
+                this.examTimeLeft = left;
+              }
+            }, 1000); // 每1000毫秒减1
+          },
+
+          // 格式化时间
+          formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+          }
+        },
+        watch: {
+          mode(newMode) {
+            this.initTimu(); // 模式改变时重新初始化当前题目
+          }
+        },
+        created() {
+          // 读取 localStorage 中的设置
+          const savedMode = localStorage.getItem('darkMode');
+          this.isDarkMode = savedMode === 'true';
+          // 应用到 body
+          document.body.classList.toggle('dark-mode', this.isDarkMode);
+
+          this.data = [...this.originalData];
+
+          if (this.examConfig.totalQuestions > this.originalData.length) {
+            this.examConfig.totalQuestions = this.originalData.length;
+          }
+          this.initTimu();
+        },
+        // 可选：在组件销毁时清理定时器
+        beforeDestroy() {
+          if (this.examTimer) {
+            clearInterval(this.examTimer);
+          }
+        }
+      });
+    </script>
+</body>
+
+</html>

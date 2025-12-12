@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Expires" content="0">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Cache-control" content="no-cache,must-revalidate">
+  <meta http-equiv="Cache" content="no-cache">
+
+  <title>网页模板</title>
+  <link rel="stylesheet" href="https://unpkg.com/view-design/dist/styles/iview.css">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, "Helvetica Neue", Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      line-height: 1.4rem;
+      font-size: 14px;
+    }
+
+    #app {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 20px;
+    }
+
+    [v-cloak] {
+      display: none !important;
+    }
+
+    #loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      font-size: 18px;
+      color: #555;
+    }
+
+    .c-practice,
+    .c-config,
+    .c-exam,
+    .c-result {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 800px;
+      min-width: 320px;
+    }
+
+    .pageControl {
+      display: flex;
+      justify-content: space-between;
+      margin: 10px 0;
+    }
+
+    .btn-base {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 6px;
+      background-color: #2d8cf0;
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+      margin: 5px;
+    }
+
+    .btn-base[disabled] {
+      background-color: #858585;
+      cursor: not-allowed;
+    }
+
+    .header-container,
+    .exam-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      font-size: 14px;
+      flex-wrap: wrap;
+    }
+
+    .process {
+      font-weight: bold;
+      width: auto;
+      margin: 0 10px;
+      flex: 0 0 auto;
+      display: block;
+      font-size: 0.8rem;
+      letter-spacing: 0.1rem;
+    }
+
+    .question-selector {
+      font-size: 16px;
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #fff;
+      color: #333;
+      max-width: 100%;
+      box-sizing: border-box;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .question-selector:focus {
+      outline: none;
+      border-color: #5cb85c;
+      box-shadow: 0 0 0 0.2rem rgba(92, 184, 92, 0.25);
+    }
+
+    .question-selector option {
+      font-size: 16px;
+      color: #333;
+      background-color: #fff;
+    }
+
+    .mode-selector {
+      margin: 0;
+      flex: 0 0 auto;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+    }
+
+    .mode-selector label {
+      margin-left: 10px;
+    }
+
+    .timu {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 2vw auto;
+      width: 100%;
+    }
+
+    .ivu-card-head p {
+      overflow: inherit;
+      white-space: inherit;
+      line-height: 24px;
+    }
+
+    .title {
+      font-size: large;
+      line-height: 24px;
+    }
+
+    .type {
+      padding: 3px 6px;
+      line-height: 20px;
+      margin-right: 10px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      color: white;
+      border-radius: 6px;
+      display: inline-block;
+      letter-spacing: 0.1rem;
+      text-indent: 0.2rem;
+      background-color: #1890ff;
+    }
+
+    .type-single {
+      background-color: #19be6b;
+    }
+
+    .type-multiple {
+      background-color: #2db7f5;
+    }
+
+    .type-judge {
+      background-color: #f04134;
+    }
+
+    .type-qa {
+      background-color: #80848f;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      margin: 0 0 2vw;
+      line-height: 2rem;
+      letter-spacing: 0.1rem;
+    }
+
+    .options div {
+      padding: 1vw 2vw;
+      border: 1px solid #ddd;
+      border-radius: 1.5vw;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+
+    .options .active {
+      background-color: #c9d0ee;
+      border: 1px solid #000;
+    }
+
+    .options .disabled {
+      pointer-events: none;
+    }
+
+    .result {
+      margin: 2vw 0 3vw;
+      padding: 8px 16px;
+      border-radius: 4px;
+      color: #515a6e;
+      font-size: 12px;
+      line-height: 16px;
+    }
+
+    .result.success {
+      background-color: #dff0d8;
+      color: #3c763d;
+      border: 1px solid #8ce6b0;
+    }
+
+    .result.warning {
+      background-color: #fcf8e3;
+      color: #8a6d3b;
+      border: 1px solid #ffd77a;
+    }
+
+    .result.info {
+      background-color: #ecf0f1;
+      color: #31708f;
+      border: 1px solid #abdcff;
+    }
+
+    .answer,
+    .analysis {
+      margin-top: 1vw;
+      white-space: pre-line;
+    }
+
+    .config-info {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 2vw auto;
+      width: 100%;
+    }
+
+    .exam-header {
+      padding: 12px;
+      background: #f8f9fa;
+      border-bottom: 1px solid #dee2e6;
+      margin-bottom: 16px;
+      font-size: 14px;
+      display: flex;
+      justify-content: space-between;
+      /* color: #333; */
+    }
+
+    .exam-header strong {
+      font-size: 16px;
+      color: #f50;
+    }
+
+    .question-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 15px 0;
+    }
+
+    .nav-btn {
+      width: 40px;
+      height: 40px;
+      margin: 4px;
+      border: 2px solid transparent;
+      border-radius: 8px;
+      background-color: #e9ecef;
+      color: #495057;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .nav-btn.active {
+      background-color: #2d8cf0 !important;
+      color: white !important;
+      border-color: #2d8cf0;
+      transform: scale(1.05);
+    }
+
+    .nav-btn.answered {
+      background-color: #38b06d;
+      color: white;
+      border-color: #38b06d;
+    }
+
+    .nav-btn.marked {
+      background-color: #ffb700;
+      color: #1a1a1a;
+      border-color: #e69e00;
+    }
+
+    .nav-btn.unanswered {
+      background-color: #e9ecef;
+      color: #495057;
+    }
+
+
+
+
+    .toggle-analysis {
+      margin: 20px 0;
+    }
+
+    .exam-result {
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .exam-result-item {
+      margin: 15px 0;
+      padding: 10px;
+      border: 1px dashed #ccc;
+    }
+
+    .result-summary {
+      max-width: 800px;
+      width: 100%;
+      margin: 40px auto;
+      text-align: center;
+      padding: 0 20px;
+      box-sizing: border-box;
+      background-color: #e5e5e6;
+    }
+
+    .exam-result-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .exam-title {
+      font-size: 24px;
+      color: #007bff;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .exam-time {
+      font-size: 16px;
+      color: #6c757d;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .exam-result-card {
+      width: 100%;
+      max-width: 800px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .exam-info-left {
+      flex: 1;
+      margin-right: 20px;
+    }
+
+    .exam-info-right {
+      flex: 1;
+      text-align: center;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .exam-answering-person,
+    .exam-use-time {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    .exam-corrent-count {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .exam-total-count {
+      font-size: 14px;
+      color: #6c757d;
+    }
+
+    .exam-score {
+      font-size: 72px;
+      font-weight: bold;
+      color: #ff6f00;
+      margin: 20px 0;
+    }
+
+    .exam-total-score {
+      padding: 2px 4px;
+      line-height: 20px;
+      margin-top: 13px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      color: white;
+      border-radius: 12px;
+      display: inline-block;
+      letter-spacing: 0.1rem;
+      text-indent: 0.2rem;
+      background-color: #1890ff;
+    }
+
+    .exam-parse-button {
+      margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .exam-result-card {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .exam-info-left,
+      .exam-info-right {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 20px;
+        flex: 1 1 100%;
+      }
+
+      .exam-score {
+        font-size: 72px;
+      }
+    }
+
+    .config-container {
+      max-width: 800px;
+      width: 100%;
+      margin: 40px auto;
+      padding: 30px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    }
+
+    .config-container h2 {
+      text-align: center;
+      color: #333;
+      font-size: 24px;
+      margin-bottom: 24px;
+      font-weight: 600;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #515a6e;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group input[type="number"] {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #dddee1;
+      border-radius: 6px;
+      font-size: 15px;
+      color: #515a6e;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      box-sizing: border-box;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #57a3f5;
+      box-shadow: 0 0 0 2px rgba(87, 163, 245, 0.2);
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 30px;
+    }
+
+    .button-group button {
+      padding: 12px 32px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-width: 100px;
+    }
+
+    .button-group button.btn-start {
+      background-color: #57a3f5;
+      color: white;
+    }
+
+    .button-group button.btn-start:hover {
+      background-color: #3d8bdf;
+      transform: translateY(-1px);
+    }
+
+    .button-group button.btn-reset {
+      background-color: #f7f7f7;
+      color: #999;
+      border: 1px solid #dddee1;
+    }
+
+    .button-group button.btn-reset:hover {
+      background-color: #e8e8e8;
+      color: #666;
+    }
+
+    @media (max-width: 576px) {
+      .config-container {
+        margin: 20px 15px;
+        padding: 20px;
+      }
+
+      .button-group {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .button-group button {
+        width: 200px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app" v-cloak>
+    <div class="c-practice" v-if="currentView === 'practice'">
+      <ButtonGroup class="pageControl">
+        <Button type="primary" class="btn-base top-left" size="small" @click="currentView = 'config'">📝 开始考试</Button>
+
+        <button @click="toggleDarkMode" class="btn-base dark-mode-toggle" disabled>
+          {{ isDarkMode ? '🌙 浅色模式' : '☀️ 深色模式' }}</button>
+      </ButtonGroup>
+
+      <div class="header-container">
+        <p class='process'>第 {{page + 1}} / {{data.length}}题</p>
+        <select class="question-selector" v-model="page" @change="goToQuestion(page)">
+          <option v-for="(item, index) in data" :value="index" :key="index">第 {{ index + 1 }} 题
+          </option>
+        </select>
+
+        <form class="mode-selector">
+          <label><input type="radio" name="mode" value="practice" v-model="mode">刷题</label>
+          <label><input type="radio" name="mode" value="review" v-model="mode">看题</label>
+        </form>
+      </div>
+
+      <Card class='timu'>
+        <p slot="title">
+          <label class='type' v-if="timu.options" :class="{
+      'type-single': timu.options.length && timu.answer.length === 1 && timu.options[0] !== '正确',
+      'type-multiple': timu.options.length && timu.answer.length > 1,
+      'type-judge': timu.options.length && timu.answer.length === 1 && timu.options[0] === '正确',
+      'type-qa': !timu.options.length
+    }">{{timu.options.length ?
+            (timu.answer.length === 1 ? (timu.options[0]!=='正确' ? '单选':'判断') : '多选') :
+            '问答'}}</label><label class="title">{{ page + 1 }} 、{{timu.title}}</label>
+        </p>
+        <div class="options">
+          <div v-for="(option, key) in timu.options" :key="key" @click="!answer && select(key)"
+            :class="{ active: answerSelected.includes(key), disabled: answer }">
+            {{ alphabet[key] }}. {{ option }}
+          </div>
+        </div>
+        <div v-if="mode === 'practice' && answer && result===1" class='result success'>恭喜回答正确</div>
+        <div v-if="mode === 'practice' && answer && result===0" class='result warning'>抱歉回答错误了哦！</div>
+        <div v-if="(mode === 'practice' && answer && result === 2) || (mode === 'review' && result === 2)"
+          class='result info'>问答题暂不支持解答</div>
+        <div v-if="answer || mode === 'review'" class="answer">答案：{{ timu.answer }}</div>
+        <div v-if="answer || mode === 'review'" class="analysis">解析：{{ timu.analysis || '该答案暂无解析' }}</div>
+      </Card>
+
+      <ButtonGroup class="pageControl">
+        <Button type="primary" class="btn-base btn-prev" @click="prevQuestion" :disabled="page === 0">⏪上一题</Button>
+        <Button type="primary" class="btn-base btn-check"
+          :disabled="answerSelected.length === 0 || mode === 'review' || answer" @click="submitAnswer" size="large" long
+          v-if="mode === 'practice' && timu.options.length > 0">✅确定答案</Button>
+        <Button type="primary" class="btn-base btn-next" @click="nextQuestion"
+          :disabled="page===data.length-1">⏩下一题</Button>
+      </ButtonGroup>
+    </div>
+
+    <div class="c-config" v-if="currentView === 'config'">
+      <ButtonGroup class="pageControl">
+        <Button type="primary" class="btn-base top-left" size="small" @click="returnPractice">🔙返回练习</Button>
+        <button @click="toggleDarkMode" class="btn-base dark-mode-toggle" disabled>
+          {{ isDarkMode ? '🌙 浅色模式' : '☀️ 深色模式' }}
+        </button>
+      </ButtonGroup>
+
+      <div class="config-container">
+        <h2>考试配置</h2>
+        <div class="form-group">
+          <label>姓名：</label>
+          <Input v-model="studentInfo.name" placeholder="请输入姓名" />
+        </div>
+        <div class="form-group">
+          <label>员工编号：</label>
+          <Input v-model="studentInfo.id" placeholder="请输入员工编号" />
+        </div>
+        <div class="form-group">
+          <label>题目数量：</label>
+          <input type="number" v-model.number="examConfig.totalQuestions" :min="1" :max="originalData.length" />
+        </div>
+        <div class="form-group">
+          <label>考试时间（分钟）：</label>
+          <input type="number" v-model.number="examConfig.timeLimit" :min="1" />
+        </div>
+        <div class="form-group">
+          <label>合格标准：</label>
+          <input type="number" v-model.number="examConfig.qualify" min="1" disabled />
+        </div>
+        <div class="button-group">
+          <Button class="btn-start" type="primary" long size="large" @click="startExam">🚀开始考试</Button>
+          <button class="btn-reset" @click="resetConfig">重置</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="c-exam" v-if=" currentView==='exam'">
+      <ButtonGroup class="pageControl">
+        <Button type="primary" size="small" class="btn-base top-left" @click="confirmSubmit">🎯提交考试</Button>
+        <button @click="toggleDarkMode" class="btn-base dark-mode-toggle" disabled>
+          {{ isDarkMode ? '🌙 浅色模式' : '☀️ 深色模式' }}
+        </button>
+      </ButtonGroup>
+
+      <div class="exam-header">
+        <span>🧑考生：{{ studentInfo.name }} ({{ studentInfo.id }})</span>
+        <span>合格标准：{{examConfig.qualify}}分</span>
+        <span>⏳剩余：<strong>{{ formatTime(examTimeLeft) }}</strong></span>
+      </div>
+
+      <Card class='timu'>
+        <p slot="title">
+          <label class='type' v-if="timu.options" :class="{
+      'type-single': timu.options.length && timu.answer.length === 1 && timu.options[0] !== '正确',
+      'type-multiple': timu.options.length && timu.answer.length > 1,
+      'type-judge': timu.options.length && timu.answer.length === 1 && timu.options[0] === '正确',
+      'type-qa': !timu.options.length
+    }">{{timu.options.length ?
+            (timu.answer.length === 1 ? (timu.options[0]!=='正确' ? '单选':'判断') : '多选') :
+            '问答'}}</label> <label class="title">{{ page + 1 }} 、{{timu.title}}</label>
+          <button class="btn" :class="currentIsMarked ? 'btn-warning' : 'btn-outline'" @click="toggleMark">
+            {{ currentIsMarked ? '📌取消标记' : '📌标记题目' }}
+          </button>
+
+        </p>
+
+        <div class="options">
+          <div v-for="(option, key) in timu.options" :key="key" @click="selectExam(key)"
+            :class="{ active: examAnswers[page]?.includes(key) }">
+            <label> {{ alphabet[key] }}. {{ option }}</label>
+          </div>
+        </div>
+      </Card>
+
+      <ButtonGroup class="pageControl">
+        <Button type="primary" class="btn-base btn-prev" @click="prevQuestion" :disabled="page === 0">⏪上一题</Button>
+        <select v-model="page" class="question-selector" @change="goToQuestion(page)">
+          <option v-for="(_, index) in data" :key="index" :value="index" :style="{
+      // 背景色优先级：标记(黄色) > 已答(绿色) > 未答(灰色)
+      backgroundColor: page===index?'#2d8cf0': isMarked(index) ? '#ffb700': isAnswered(index) ? '#38b06d' :  '#e9ecef', 
+
+      // 文字颜色
+      color: page===index? '#ffffff' : isMarked(index) ? '#1a1a1a' : isAnswered(index) ? '#ffffff' :  '#495057',
+
+      // 加粗当前题
+      fontWeight: page === index ? 'bold' : 'normal',
+      borderRadius: '6px',
+      margin: '2px'
+    }">
+            第 {{ index + 1 }} 题
+            {{ isMarked(index) ? ' ⭐' : isAnswered(index) ? ' ✅' : ' ⭕' }}
+          </option>
+        </select>
+        <Button type="primary" class="btn-base btn-next" @click="nextQuestion"
+          :disabled="page === data.length-1">⏩下一题</Button>
+      </ButtonGroup>
+
+      <div class="question-nav">
+        <button v-for="(item, index) in data" :key="index" @click="goToQuestion(index)" :class="[
+    'nav-btn',
+    isMarked(index) ? 'marked' : isAnswered(index) ? 'answered' : 'unanswered',
+    page === index ? 'active' : ''
+  ]"><label> {{ index + 1 }}</label>
+        </button>
+      </div>
+    </div>
+
+    <div class="c-result" v-if="currentView === 'result'">
+      <ButtonGroup class="pageControl">
+        <Button type="primary" class="btn-base top-left" @click="returnPractice">🔙返回练习</Button>
+        <button type="primary" class="btn-base dark-mode-toggle" @click="toggleDarkMode" disabled>
+          {{ isDarkMode ? '🌙 浅色模式' : '☀️ 深色模式' }}
+        </button>
+      </ButtonGroup>
+
+      <div class="result-summary">
+        <div class="exam-title">网页模板</div>
+        <div class="exam-time">完成时间 {{new Date().toLocaleString()}}</div>
+        <div class="exam-result-card">
+          <div class="exam-info-left">
+            <div class="exam-score" :style="{
+            color: examResult.score >= examConfig.qualify ? '#38b06d' : '#d9534f'
+          }">{{ examResult.score }}</div>
+            <div class="exam-total-score">总分100</div>
+          </div>
+
+          <div class="exam-info-right">
+            <div>
+              <div class="exam-answering-person">答题人：{{ studentInfo.name }}({{studentInfo.id}})</div>
+              <div class="exam-use-time">用时：{{ formatTime(examConfig.timeLimit * 60 - examTimeLeft) }}</div>
+            </div>
+            <div>
+              <div class="exam-corrent-count">答对 {{ examResult.correctCount }}题</div>
+              <div class="exam-total-count">共{{ examResult.totalCount }}题</div>
+            </div>
+          </div>
+
+        </div>
+        <Divider class="result-divider"></Divider>
+
+        <div class="toggle-analysis" @click="toggleAnalysis">
+          {{ showAnalysis ? '收起答题解析 ▲' : '查看答题解析 ▼' }}
+        </div>
+        <label>
+          <input v-if="showAnalysis" type="checkbox" v-model="showAllQuestions"> 显示全部题目
+        </label>
+
+        <div v-if="showAnalysis" class="analysis-panel">
+          <div v-for="(item, index) in data" :key="item.id" class="exam-result-item"
+            v-if="showAllQuestions || !examJudge[index]"
+            style="text-align: left; margin: 20px 0; padding: 15px; border: 1px dashed #e8eaec; border-radius: 4px;">
+
+            <p><strong>{{index+1}}.</strong>{{item.title}} {{ examJudge[index] ? '✅ 回答正确' : '❌ 回答错误' }}</p>
+            <div>
+              <div v-for="(option, key) in item.options" :key="key"
+                :class="{ active: examAnswers[index]?.includes(key) }">
+                <label>{{ alphabet[key] }}. {{ option }}</label>
+              </div>
+            </div>
+            <div> 你的答案：{{(examAnswers[index] || []).map(k =>alphabet[k]).sort().join('') || '未作答'}}</div>
+            <div> 正确答案：{{item.answer}}</div>
+            <div v-if="item.analysis">解析：{{ item.analysis }}</div>
+          </div>
+        </div>
+      </div>
+
+      <ButtonGroup class="pageControl">
+        <button type="primary" class="btn-base btn-save" @click="saveReport" long>💾保存报告</button>
+        <button type="primary" class="btn-base btn-restart" @click="currentView = 'config'" long>🚀重新考试</button>
+      </ButtonGroup>
+    </div>
+
+  </div>
+
+  <div id="loading">
+    <p>加载中，请稍候...</p>
+  </div>
+
+  <script src="https://unpkg.com/vue@2.6.14/dist/vue.min.js"></script>
+  <script src="https://unpkg.com/iview/dist/iview.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+  <script>
+    new Vue({
+      el: '#app',
+      data() {
+        return {
+          originalData: [{ 替换 }],
+          data: [],
+          page: 0,
+          answerSelected: [],
+          answer: false,
+          result: false,
+          mode: 'practice',
+          currentView: 'practice',
+
+          examConfig: {
+            totalQuestions: 10,
+            timeLimit: 30,
+            qualify: 80
+          },
+          examResult: {
+            correctCount: 0,
+            totalCount: 0,
+            score: 0
+          },
+          studentInfo: {
+            id: "",
+            name: ""
+          },
+          examAnswers: [],
+          examJudge: [],
+          markedQuestions: [],
+          examTimeLeft: 0,
+          examTimer: null,
+
+          showAnalysis: true,
+          isDarkMode: false,
+
+          showAllQuestions: false,
+          alphabet: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
+        };
+      },
+      mounted() {
+        const loading = document.getElementById('loading');
+        if (loading) {
+          loading.remove();
+        }
+      },
+      computed: {
+        timu() {
+          return this.data[this.page] || {};
+        },
+
+        isLastQuestion() {
+          return this.page === this.data.length - 1;
+        },
+        isAnswered() {
+          return (index) => {
+            const ans = this.examAnswers[index];
+            return Array.isArray(ans) && ans.length > 0;
+          };
+        },
+        isMarked() {
+          return (index) => this.markedQuestions.includes(index);
+        },
+        currentIsMarked() {
+          return this.markedQuestions.includes(this.page);
+        }
+      },
+      methods: {
+
+        initTimu() {
+          this.answerSelected = [];
+          this.answer = this.mode === 'review';
+          this.result = false;
+          const q = this.timu;
+          if (!q.options || q.options.length === 0) {
+            this.answer = true;
+            this.result = 2;
+          }
+        },
+
+        toggleMark() {
+          const index = this.page;
+          const i = this.markedQuestions.indexOf(index);
+          if (i > -1) {
+            this.markedQuestions.splice(i, 1);
+          } else {
+            this.markedQuestions.push(index);
+          }
+        },
+
+
+        select(key) {
+          const multi = this.timu.answer.length > 1;
+          const i = this.answerSelected.indexOf(key);
+
+          if (i > -1) {
+            this.answerSelected.splice(i, 1);
+          } else if (multi) {
+            this.answerSelected.push(key);
+          } else {
+            this.answerSelected = [key];
+            if (this.mode === 'practice') {
+              this.$nextTick(this.submitAnswer);
+            }
+          }
+
+        },
+
+        submitAnswer() {
+          const correct = this.normalizeAnswer(this.timu.answer);
+          const user = this.answerSelected.map(i => this.alphabet[i]).sort();
+
+          this.result = JSON.stringify(correct) === JSON.stringify(user) ? 1 : 0;
+
+          this.answer = true;
+        },
+
+        normalizeAnswer(str) {
+          return str.toUpperCase().replace(/[^A-Z]/g, '').split('').sort();
+        },
+
+        resetConfig() { },
+        startExam() {
+          const { id, name } = this.studentInfo;
+          const count = parseInt(this.examConfig.totalQuestions);
+
+          if (!name.trim()) {
+            return this.$Message?.warning("请输入姓名") || alert("请输入姓名");
+          }
+          if (!id.trim()) {
+            return this.$Message?.warning("请输入编号") || alert("请输入编号");
+          }
+
+          if (isNaN(count) || count < 1 || count > this.originalData.length) {
+            this.$Modal.warning({
+              title: '输入错误',
+              content: `请填写1-${this.originalData.length}之间的数字`
+            });
+            return;
+          }
+
+          const shuffled = this.shuffle([...this.originalData]).slice(0, count);
+
+          this.data = shuffled.map(question => {
+            return this.shuffleOptions(question);
+          });
+
+          this.examAnswers = Array.from({ length: count }, () => null);
+          this.examJudge = Array.from({ length: count }, () => null);
+          this.markedQuestions = [];
+          this.page = 0;
+          this.examTimeLeft = this.examConfig.timeLimit * 60;
+          this.currentView = 'exam';
+          this.startExamTimer();
+          this.initTimu();
+        },
+
+        selectExam(key) {
+          const answers = this.examAnswers[this.page] || [];
+
+          if (this.timu.answer.length === 1) {
+            this.$set(this.examAnswers, this.page, [key]);
+          } else {
+            const i = answers.indexOf(key);
+            if (i > -1) {
+              this.$set(this.examAnswers, this.page, answers.filter(k => k !== key));
+            } else {
+              this.$set(this.examAnswers, this.page, [...answers, key]);
+            }
+          }
+
+          const currentIndex = this.page;
+          if (this.markedQuestions.includes(currentIndex)) {
+            this.toggleMark();
+          }
+        },
+
+        confirmSubmit() {
+          this.$Modal.confirm({
+            title: '确认提交',
+            content: '提交后无法修改，确定要交卷吗？',
+            onOk: () => this.submitExam()
+          });
+        },
+
+        submitExam() {
+          this.currentView = 'result';
+
+          if (this.examTimer) {
+            clearInterval(this.examTimer);
+            this.examTimer = null;
+          }
+
+          let correct = 0;
+          this.data.forEach((q, index) => {
+            const userAns = (this.examAnswers[index] || [])
+              .map(k => this.alphabet[k])
+              .sort()
+              .join('');
+            const correctAns = this.normalizeAnswer(q.answer).join('');
+            this.examJudge[index] = (userAns === correctAns);
+            if (this.examJudge[index]) correct++;
+          });
+
+          this.examResult = {
+            correctCount: correct,
+            totalCount: this.data.length,
+            score: Math.round(correct / this.data.length * 100)
+          };
+        },
+
+        goToQuestion(index) {
+          if (index >= 0 && index < this.data.length) {
+            this.page = index;
+            this.initTimu();
+          }
+        },
+        nextQuestion() {
+          if (this.page < this.data.length - 1) {
+            this.goToQuestion(this.page + 1);
+          }
+        },
+
+        prevQuestion() {
+          if (this.page > 0) {
+            this.goToQuestion(this.page - 1);
+          }
+        },
+
+        returnPractice() {
+          this.currentView = 'practice';
+          this.data = [...this.originalData];
+          this.page = 0;
+          this.initTimu();
+        },
+        toggleAnalysis() {
+          this.showAnalysis = !this.showAnalysis;
+        },
+
+        saveReport() {
+          const element = document.querySelector('.result-summary');
+          if (!element) return;
+
+          element.style.backgroundColor = '#fff';
+          html2canvas(element, {
+            backgroundColor: '#fff',
+            scale: 2,
+            useCORS: true
+          }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = `考试报告_${this.studentInfo.name}(${this.studentInfo.id}).png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+          }).catch(err => {
+            console.error('保存报告失败:', err);
+            alert('保存失败');
+          }).finally(() => {
+            element.style.backgroundColor = '';
+          });
+        },
+
+        shuffle(arr) {
+          for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+          }
+          return arr;
+        },
+
+        shuffleOptions(q) {
+
+          if (!q.options) {
+            return { ...q };
+          }
+
+          const isJudge =
+            q.options.length === 2 &&
+            (q.options.includes('正确') ||
+              q.options.includes('错误'));
+
+          if (isJudge) {
+            return { ...q };
+          }
+
+          const options = [...q.options];
+
+          const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
+
+          const answerChars = q.answer.split('');
+          const newAnswer = [];
+
+          const optionMap = {};
+          for (let i = 0; i < options.length; i++) {
+            optionMap[letters[i]] = options[i];
+          }
+
+          for (let i = options.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [options[i], options[j]] = [options[j], options[i]];
+          }
+
+          for (const letter of answerChars) {
+            const content = optionMap[letter];
+            if (content) {
+              const newIndex = options.indexOf(content);
+              if (newIndex !== -1) {
+                newAnswer.push(letters[newIndex]);
+              }
+            }
+          }
+
+          const finalAnswer = Array.isArray(q.answer) ? newAnswer : newAnswer.join('');
+
+          return {
+            ...q,
+            options: options,
+            answer: finalAnswer
+          };
+        },
+
+        toggleDarkMode() {
+          this.isDarkMode = !this.isDarkMode;
+          localStorage.setItem('darkMode', this.isDarkMode);
+          document.body.classList.toggle('dark-mode', this.isDarkMode);
+        },
+
+        startExamTimer() {
+          const endTime = Date.now() + this.examTimeLeft * 1000;
+          this.examTimer = setInterval(() => {
+            const left = Math.floor((endTime - Date.now()) / 1000);
+            if (left <= 0) {
+              clearInterval(this.examTimer);
+              this.$Modal.info({
+                title: '时间到',
+                content: '考试时间到，已自动交卷！',
+                onOk: () => {
+                  this.submitExam();
+                }
+              });
+            } else {
+              this.examTimeLeft = left;
+            }
+          }, 1000);
+        },
+
+        formatTime(seconds) {
+          const mins = Math.floor(seconds / 60);
+          const secs = seconds % 60;
+          return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+      },
+      watch: {
+        mode(newMode) {
+          this.initTimu();
+        }
+      },
+      created() {
+        const savedMode = localStorage.getItem('darkMode');
+        this.isDarkMode = savedMode === 'true';
+        document.body.classList.toggle('dark-mode', this.isDarkMode);
+
+        this.data = [...this.originalData];
+
+        if (this.examConfig.totalQuestions > this.originalData.length) {
+          this.examConfig.totalQuestions = this.originalData.length;
+        }
+        this.initTimu();
+      },
+
+      beforeDestroy() {
+        if (this.examTimer) {
+          clearInterval(this.examTimer);
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>
