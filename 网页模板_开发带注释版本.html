@@ -686,7 +686,7 @@
         </div>
         <div class="form-group">
           <label>合格标准：</label>
-          <input type="number" v-model.number="examConfig.qualify" min="1" disabled />
+          <input type="number" v-model.number="examConfig.qualify" min="1" max="100" />
         </div>
         <div class="button-group">
           <Button class="btn-start" type="primary" long size="large" @click="startExam">🚀开始考试</Button>
