@@ -9,7 +9,7 @@
   <meta http-equiv="Cache-control" content="no-cache,must-revalidate">
   <meta http-equiv="Cache" content="no-cache">
 
-  <title>网页模板</title>
+  <title>20251212_1</title>
   <link rel="stylesheet" href="https://unpkg.com/view-design/dist/styles/iview.css">
   <style>
     body {
@@ -648,7 +648,7 @@
         </div>
         <div class="form-group">
           <label>合格标准：</label>
-          <input type="number" v-model.number="examConfig.qualify" min="1" max="100" />
+          <input type="number" v-model.number="examConfig.qualify" min="1" disabled />
         </div>
         <div class="button-group">
           <Button class="btn-start" type="primary" long size="large" @click="startExam">🚀开始考试</Button>
@@ -737,7 +737,7 @@
       </ButtonGroup>
 
       <div class="result-summary">
-        <div class="exam-title">网页模板</div>
+        <div class="exam-title">20251212_1</div>
         <div class="exam-time">完成时间 {{new Date().toLocaleString()}}</div>
         <div class="exam-result-card">
           <div class="exam-info-left">
@@ -808,7 +808,49 @@
       el: '#app',
       data() {
         return {
-          originalData: [{ 替换 }],
+          originalData: [
+  {
+    "id": "q_0001",
+    "title": "今天（2025年12月12日）是星期几？",
+    "options": [
+      "一",
+      "三",
+      "五"
+    ],
+    "answer": "C",
+    "analysis": "2025年12月12日是星期五。"
+  },
+  {
+    "id": "q_0002",
+    "title": "今天早上吃的什么东西？",
+    "options": [
+      "鸡蛋",
+      "牛奶",
+      "巧克力",
+      "豆浆",
+      "咖啡"
+    ],
+    "answer": "AB",
+    "analysis": "今天吃的鸡蛋、牛奶。"
+  },
+  {
+    "id": "q_0003",
+    "title": "华为是中国最牛逼的企业之一。",
+    "options": [
+      "正确",
+      "错误"
+    ],
+    "answer": "A",
+    "analysis": ""
+  },
+  {
+    "id": "q_0004",
+    "title": "“凡是敌人反对的的我们就要拥护，凡是敌人拥护的我们就要反对”这句话是谁说的？",
+    "options": [],
+    "answer": "毛主席。",
+    "analysis": "毛主席万岁。"
+  }
+],
           data: [],
           page: 0,
           answerSelected: [],
