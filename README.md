@@ -32,6 +32,14 @@ text2Json2Html.py为旧版控制台程序，无窗口界面
 
 
 
+#### 项目地址
 
+项目地址（github）：https://github.com/wwchun1314/Practice-offline
+
+项目地址（gitee）： https://gitee.com/wwchun1314/practice-offline
+
+
+
+#### 联系方式
 
 邮箱：wwch12322@163.com
